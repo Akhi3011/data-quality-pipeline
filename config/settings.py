@@ -20,3 +20,17 @@ VALID_CURRENCIES = ["USD", "INR", "EUR", "GBP"]
 METRICS_INTERVAL = 50
 BAD_RATE_ALERT_THRESHOLD_PCT = 25.0
 TOP_FAILURE_REASONS_LIMIT = 3
+
+# Kafka consumer behavior
+CONSUMER_GROUP_ID = "quality-validator-group"
+
+# earliest: good for demos/backfills; latest: reduces catching up on old messages
+KAFKA_AUTO_OFFSET_RESET = "earliest"
+
+# Retries for transient PostgreSQL issues (network blips, contention, etc.)
+DB_MAX_RETRIES = 5
+DB_RETRY_BASE_SLEEP_SECONDS = 0.2
+DB_RETRY_MAX_SLEEP_SECONDS = 5.0
+
+# Optional: cap how many messages the offline demo processes (0 means unlimited)
+OFFLINE_DEMO_MAX_EVENTS = 0

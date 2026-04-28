@@ -28,6 +28,21 @@ The format is inspired by Keep a Changelog and uses practical milestone notes ra
 
 ---
 
+## 2026-04-28 - Reliability and Test Harness Improvements
+
+### Added
+- `pytest` test coverage for validator edge cases (`tests/`).
+- Shared processing logic in `consumer/pipeline_logic.py` to reduce drift between demos and the Kafka consumer.
+- `scripts/offline_consumer_demo.py` to exercise decoding + validation + DB writes without running Kafka producer/consumer binaries.
+- `producer/event_factory.py` extracted from `producer.py` for reuse across producer and offline tooling.
+
+### Improved
+- Consumer now survives invalid JSON payloads by quarantining parse failures instead of crashing the deserialization layer.
+- PostgreSQL commits and writes include retry/backoff for transient connection failures (`consumer/db_writer.py`).
+- Validation engine short-circuits non-object payloads to avoid noisy cascading errors.
+
+---
+
 ## Planned Next Iterations
 
 ### Iteration 1 - Reliability Hardening

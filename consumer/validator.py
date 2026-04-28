@@ -14,6 +14,16 @@ from config.settings import VALID_EVENT_TYPES, VALID_CURRENCIES
 REQUIRED_FIELDS = ["event_id", "user_id", "product_id", "event_type", "amount", "currency", "timestamp"]
 
 
+def check_event_is_object(event):
+    """
+    Guardrail: kafka-json payloads should decode to a JSON object (dict).
+    If not, downstream field rules are not meaningful.
+    """
+    if isinstance(event, dict):
+        return True, None
+    return False, f"Event must be a JSON object/dict; got {type(event).__name__}"
+
+
 def check_required_fields(event: dict):
     """Rule 1: All required fields must be present."""
     missing = [f for f in REQUIRED_FIELDS if f not in event]
@@ -71,6 +81,7 @@ def check_timestamp(event: dict):
 
 # All rules in execution order
 ALL_RULES = [
+    check_event_is_object,
     check_required_fields,
     check_null_values,
     check_amount,
@@ -108,4 +119,7 @@ def validate_event_collect_errors(event: dict):
         is_valid, reason = rule(event)
         if not is_valid and reason:
             errors.append(reason)
+            # If the payload isn't a JSON object/dict, other field rules aren't meaningful (and may crash).
+            if rule is check_event_is_object:
+                break
     return len(errors) == 0, errors

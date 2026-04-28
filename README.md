@@ -9,6 +9,12 @@ Supporting docs:
 - `CHANGELOG.md` for an incremental development log
 - `PROJECT_ROADMAP.md` for planned next milestones
 
+Offline demo (no Kafka dependency; still uses Postgres like the main consumer):
+
+```bash
+python scripts/offline_consumer_demo.py --events 200
+```
+
 ---
 
 ## Architecture
@@ -196,11 +202,12 @@ Known limitations:
 
 If you want to evolve this project toward a stronger production profile, these are the next improvements:
 
-1. Add `pytest` coverage for validator and DB writer behavior.
+1. Extend `pytest` coverage to DB writes (validators are covered today).
 2. Add dead-letter topic (DLQ) for hard parse failures.
-3. Add idempotency + retry strategy around DB writes.
-4. Add dashboard/monitoring (Grafana/Metabase) for metrics tables.
-5. Add orchestrated smoke-test workflow for local verification.
+3. Add dashboard/monitoring (Grafana/Metabase) for metrics tables.
+4. Add orchestrated smoke-test workflow for local verification.
+
+Note: PostgreSQL write retry/backoff is implemented in `consumer/db_writer.py` and shared by the kafka consumer paths.
 
 ---
 

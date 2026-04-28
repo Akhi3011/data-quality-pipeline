@@ -8,7 +8,7 @@ This roadmap captures practical milestones to evolve the pipeline from a local d
 
 Target: make core logic safer to modify and easier to trust.
 
-- Add `pytest` suite for `consumer/validator.py`.
+- Expand `pytest` suite for `consumer/validator.py` (initial tests exist under `tests/`).
 - Add test cases for edge conditions (nulls, bad timestamps, bad amount types).
 - Add lightweight tests for `consumer/db_writer.py` SQL execution behavior.
 - Add deterministic test data fixtures.
@@ -23,7 +23,7 @@ Success criteria:
 
 Target: reduce fragility in long-running consumer flows.
 
-- Add retry/backoff strategy for transient PostgreSQL errors.
+- Add retry/backoff strategy for transient PostgreSQL errors (initial version implemented in code).
 - Add defensive handling for JSON decode and schema-mismatch issues.
 - Add dead-letter handling path for records that cannot be processed.
 - Improve startup checks for Kafka/PostgreSQL readiness.
