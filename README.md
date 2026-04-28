@@ -4,6 +4,11 @@ A streaming data pipeline that ingests high-volume e-commerce events from Apache
 
 Built to demonstrate real-world data engineering patterns: event streaming, data quality gates, quarantine zones, and observability.
 
+Supporting docs:
+
+- `CHANGELOG.md` for an incremental development log
+- `PROJECT_ROADMAP.md` for planned next milestones
+
 ---
 
 ## Architecture
@@ -58,6 +63,8 @@ Validation now runs in **collect-all-errors mode** inside the consumer, so a bad
 ```
 data-quality-pipeline/
 ├── docker-compose.yml          # Spins up Kafka + Zookeeper + PostgreSQL
+├── CHANGELOG.md                # Iterative changes and development notes
+├── PROJECT_ROADMAP.md          # Near-term and mid-term feature milestones
 ├── requirements.txt
 ├── config/
 │   └── settings.py             # All config in one place
