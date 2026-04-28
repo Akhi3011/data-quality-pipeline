@@ -4,17 +4,6 @@ A streaming data pipeline that ingests high-volume e-commerce events from Apache
 
 Built to demonstrate real-world data engineering patterns: event streaming, data quality gates, quarantine zones, and observability.
 
-Supporting docs:
-
-- `CHANGELOG.md` for an incremental development log
-- `PROJECT_ROADMAP.md` for planned next milestones
-
-Offline demo (no Kafka dependency; still uses Postgres like the main consumer):
-
-```bash
-python scripts/offline_consumer_demo.py --events 200
-```
-
 ---
 
 ## Architecture
@@ -69,8 +58,6 @@ Validation now runs in **collect-all-errors mode** inside the consumer, so a bad
 ```
 data-quality-pipeline/
 ├── docker-compose.yml          # Spins up Kafka + Zookeeper + PostgreSQL
-├── CHANGELOG.md                # Iterative changes and development notes
-├── PROJECT_ROADMAP.md          # Near-term and mid-term feature milestones
 ├── requirements.txt
 ├── config/
 │   └── settings.py             # All config in one place
@@ -80,8 +67,18 @@ data-quality-pipeline/
 │   ├── consumer.py             # Reads from Kafka, routes events
 │   ├── validator.py            # All validation rules
 │   └── db_writer.py            # PostgreSQL write logic
+├── tests/
+│   └── test_validator.py       # Unit tests (pytest)
 └── sql/
     └── init.sql                # Table definitions
+```
+
+---
+
+## Tests
+
+```bash
+python -m pytest -q
 ```
 
 ---
@@ -200,14 +197,14 @@ Known limitations:
 
 ## Practical Next Steps
 
-If you want to evolve this project toward a stronger production profile, these are the next improvements:
+Suggested next iterations if you extend this repo further:
 
 1. Extend `pytest` coverage to DB writes (validators are covered today).
-2. Add dead-letter topic (DLQ) for hard parse failures.
-3. Add dashboard/monitoring (Grafana/Metabase) for metrics tables.
-4. Add orchestrated smoke-test workflow for local verification.
+2. Add a Kafka dead-letter topic (DLQ) for poison messages (beyond quarantining rows in Postgres).
+3. Add dashboard/monitoring (Grafana/Metabase) using the metrics tables.
+4. Add a lightweight CI smoke test (infra up + bounded producer sample).
 
-Note: PostgreSQL write retry/backoff is implemented in `consumer/db_writer.py` and shared by the kafka consumer paths.
+Operational note: Postgres write retries are implemented in `consumer/db_writer.py`.
 
 ---
 
@@ -219,10 +216,3 @@ Note: PostgreSQL write retry/backoff is implemented in `consumer/db_writer.py` a
 - SQL tables are separated by trust level (clean vs quarantine) to mirror real warehouse quality zones.
 
 ---
-
-## What I Learned Building This
-
-- How Kafka producers and consumers work at a code level
-- Why data quarantine zones matter in production pipelines
-- How to structure validation logic so it's testable and extensible
-- The difference between fail-fast validation vs. collect-all-errors approaches

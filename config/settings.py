@@ -31,6 +31,3 @@ KAFKA_AUTO_OFFSET_RESET = "earliest"
 DB_MAX_RETRIES = 5
 DB_RETRY_BASE_SLEEP_SECONDS = 0.2
 DB_RETRY_MAX_SLEEP_SECONDS = 5.0
-
-# Optional: cap how many messages the offline demo processes (0 means unlimited)
-OFFLINE_DEMO_MAX_EVENTS = 0

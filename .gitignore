@@ -5,6 +5,9 @@ __pycache__/
 *.pyo
 *.pyd
 .pytest_cache/
+
+# local compileall temp
+.pycache_tmp/
 .mypy_cache/
 .coverage
 htmlcov/
